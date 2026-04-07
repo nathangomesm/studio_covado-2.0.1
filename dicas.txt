@@ -1,0 +1,26 @@
+ZIP pronto. Aqui está o inventário completo do que está dentro:
+35 arquivos de código, organizados assim:
+studio-covado/
+├── PLANO_MIGRACAO.md          ← guia completo de referência
+├── README.md                  ← instruções do projeto
+├── package.json               ← dependências + scripts de build/deploy
+├── next.config.ts             ← security headers + domínios de imagem
+├── tailwind.config.ts
+├── tsconfig.json
+├── .env.example               ← template das variáveis (sem segredos)
+├── .gitignore
+├── prisma/
+│   └── schema.prisma          ← tradução exata dos 3 models Django
+├── scripts/
+│   └── migrate-sqlite.ts      ← migra dados do db.sqlite3 para Postgres
+└── src/
+    ├── app/                   ← todas as rotas (home, /projeto/[id], api)
+    ├── components/            ← layout + portfolio + ui
+    ├── lib/                   ← prisma, validações Zod, env, utils
+    └── types/                 ← tipos TypeScript
+Primeiros 3 comandos ao extrair na sua máquina:
+bashcd studio-covado
+cp .env.example .env.local   # edite com suas credenciais
+npm install
+npm run dev
+O projeto não vai subir sem o banco configurado — preencha as variáveis POSTGRES_* no .env.local primeiro (você pega elas no painel da Vercel após provisionar o Postgres).

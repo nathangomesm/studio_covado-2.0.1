@@ -1,0 +1,49 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Categoria {
+  id       Int       @id @default(autoincrement())
+  nome     String    @unique @db.VarChar(50)
+  projetos Projeto[]
+
+  @@map("categorias")
+}
+
+model Projeto {
+  id              Int             @id @default(autoincrement())
+  titulo          String          @db.VarChar(100)
+  descricao       String          @db.Text
+  categoriaId     Int
+  categoria       Categoria       @relation(fields: [categoriaId], references: [id])
+  imagemPrincipal String
+  dataPublicacao  DateTime        @default(now())
+  ativo           Boolean         @default(true)
+
+  // Ficha Técnica
+  cliente         String          @default("Confidencial") @db.VarChar(100)
+  localizacao     String          @default("A definir") @db.VarChar(200)
+  area            String          @default("A definir") @db.VarChar(50)
+  status          String          @default("Concluído") @db.VarChar(100)
+
+  imagens         ImagemProjeto[]
+
+  @@map("projetos")
+}
+
+model ImagemProjeto {
+  id        Int     @id @default(autoincrement())
+  projetoId Int
+  projeto   Projeto @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  imageUrl  String
+
+  @@map("imagens_projeto")
+}
