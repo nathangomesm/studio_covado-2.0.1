@@ -1,115 +1,100 @@
-'use client'
-import { useState } from 'react'
-import Image from 'next/image'
-import type { ImagemProjeto } from '@/types'
+"use client";
 
-interface Props {
-  imagens: ImagemProjeto[]
-  titulo: string
+import { useState } from "react";
+import Link from "next/link";
+
+// Tipagens para o TypeScript não reclamar dos dados que vêm do banco
+type Categoria = {
+  id: string; // ou number, dependendo do seu schema.prisma
+  nome: string;
+};
+
+type Projeto = {
+  id: string; // ou number
+  titulo: string;
+  imagemPrincipal: string;
+  categoriaId: string; // ou number
+  categoria?: Categoria;
+};
+
+interface ProjectGalleryProps {
+  projetos: Projeto[];
+  categorias: Categoria[];
 }
 
-export default function ProjectGallery({ imagens, titulo }: Props) {
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+export default function ProjectGallery({ projetos, categorias }: ProjectGalleryProps) {
+  // Estado para controlar qual filtro está selecionado
+  const [filtroAtivo, setFiltroAtivo] = useState<string>("todos");
 
-  const fechar = () => setLightboxIndex(null)
-  const anterior = () =>
-    setLightboxIndex((i) => (i !== null ? (i - 1 + imagens.length) % imagens.length : 0))
-  const proximo = () =>
-    setLightboxIndex((i) => (i !== null ? (i + 1) % imagens.length : 0))
+  // Lógica de filtragem
+  const projetosFiltrados = filtroAtivo === "todos"
+    ? projetos
+    : projetos.filter((projeto) => projeto.categoriaId === filtroAtivo);
 
   return (
-    <>
-      {/* Grade de thumbnails */}
-      <div className="galeria-grid">
-        {imagens.map((item, index) => (
-          <div
-            key={item.id}
-            className="galeria-item"
-            onClick={() => setLightboxIndex(index)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && setLightboxIndex(index)}
-            aria-label={`Abrir imagem ${index + 1} de ${titulo}`}
-          >
-            <Image
-              src={item.imageUrl}
-              alt={`${titulo} — foto ${index + 1}`}
-              width={600}
-              height={450}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+    <section id="projetos" className="secao-padrao">
+      <div className="container-custom">
+        {/* Cabeçalho da Seção e Filtros */}
+        <div className="mb-16 text-center animate-fade-in">
+          <h3 className="titulo-secao">Nossos Projetos</h3>
+
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <button
+              onClick={() => setFiltroAtivo("todos")}
+              className={`bg-transparent border-none font-textos text-[0.8rem] uppercase tracking-[0.1em] cursor-pointer transition-all duration-300 pb-[5px] border-b ${
+                filtroAtivo === "todos"
+                  ? "opacity-100 text-carvalho border-carvalho"
+                  : "opacity-60 text-oliva border-transparent hover:opacity-100 hover:text-carvalho hover:border-carvalho"
+              }`}
+            >
+              Todos
+            </button>
+            
+            {categorias.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setFiltroAtivo(cat.id)}
+                className={`bg-transparent border-none font-textos text-[0.8rem] uppercase tracking-[0.1em] cursor-pointer transition-all duration-300 pb-[5px] border-b ${
+                  filtroAtivo === cat.id
+                    ? "opacity-100 text-carvalho border-carvalho"
+                    : "opacity-60 text-oliva border-transparent hover:opacity-100 hover:text-carvalho hover:border-carvalho"
+                }`}
+              >
+                {cat.nome}
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
-
-      {/* Lightbox nativo (sem dependência externa) */}
-      {lightboxIndex !== null && (
-        <div
-          onClick={fechar}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 1000,
-            background: 'rgba(0,0,0,0.92)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >
-          {/* Botão fechar */}
-          <button
-            onClick={fechar}
-            style={{
-              position: 'absolute', top: '1.5rem', right: '1.5rem',
-              background: 'none', border: 'none', color: 'white',
-              fontSize: '2rem', cursor: 'pointer', lineHeight: 1,
-            }}
-            aria-label="Fechar"
-          >
-            ×
-          </button>
-
-          {/* Botão anterior */}
-          <button
-            onClick={(e) => { e.stopPropagation(); anterior() }}
-            style={{
-              position: 'absolute', left: '1rem',
-              background: 'none', border: 'none', color: 'white',
-              fontSize: '2.5rem', cursor: 'pointer', padding: '1rem',
-            }}
-            aria-label="Imagem anterior"
-          >
-            ‹
-          </button>
-
-          {/* Imagem principal */}
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{ position: 'relative', maxWidth: '90vw', maxHeight: '85vh' }}
-          >
-            <Image
-              src={imagens[lightboxIndex].imageUrl}
-              alt={`${titulo} — foto ${lightboxIndex + 1}`}
-              width={1400}
-              height={900}
-              style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain' }}
-              priority
-            />
-            <p style={{ color: 'rgba(255,255,255,0.5)', textAlign: 'center', marginTop: '0.5rem', fontSize: '0.85rem' }}>
-              {lightboxIndex + 1} / {imagens.length}
-            </p>
-          </div>
-
-          {/* Botão próximo */}
-          <button
-            onClick={(e) => { e.stopPropagation(); proximo() }}
-            style={{
-              position: 'absolute', right: '1rem',
-              background: 'none', border: 'none', color: 'white',
-              fontSize: '2.5rem', cursor: 'pointer', padding: '1rem',
-            }}
-            aria-label="Próxima imagem"
-          >
-            ›
-          </button>
         </div>
-      )}
-    </>
-  )
+
+        {/* Grid de Projetos */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-16 gap-x-8">
+          {projetosFiltrados.length > 0 ? (
+            projetosFiltrados.map((projeto) => (
+              <Link href={`/projeto/${projeto.id}`} key={projeto.id} className="block group animate-fade-in">
+                <div className="bg-transparent cursor-pointer">
+                  {/* Container da Imagem com os efeitos de Hover */}
+                  <div className="aspect-[4/3] overflow-hidden mb-6 relative">
+                    <img
+                      src={projeto.imagemPrincipal}
+                      alt={projeto.titulo}
+                      className="w-full h-full object-cover grayscale-[20%] transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.03] group-hover:grayscale-0"
+                    />
+                  </div>
+                  {/* Informações do Card */}
+                  <div>
+                    <h4 className="text-[1.5rem] mb-1 text-carvalho font-titulos">{projeto.titulo}</h4>
+                    <p className="text-[0.8rem] uppercase tracking-[0.1em] text-oliva font-textos">
+                      {projeto.categoria?.nome || "Projeto"}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="text-center col-span-full text-oliva mt-8">Em breve novos projetos.</p>
+          )}
+        </div>
+      </div>
+    </section>
+  );
 }

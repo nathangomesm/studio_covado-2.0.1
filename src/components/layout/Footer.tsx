@@ -1,8 +1,9 @@
 export default function Footer() {
-  const year = new Date().getFullYear()
   return (
-    <footer>
-      <p>&copy; {year} Studio Côvado — Feito na medida do seu viver.</p>
+    <footer className="py-16 bg-carvalho text-bege text-center text-[0.85rem] tracking-[0.05em]">
+      <div className="container-custom flex flex-col items-center gap-4">
+        <p>&copy; 2026 Studio Côvado - Feito na medida do seu viver.</p>
+      </div>
     </footer>
-  )
+  );
 }
