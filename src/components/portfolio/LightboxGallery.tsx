@@ -56,6 +56,7 @@ export default function LightboxGallery({ titulo, imagemPrincipal, galeria }: Li
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {todasAsFotos.map((url, index) => (
                     <div
+                    
                         key={index}
                         className="h-[400px] relative overflow-hidden group cursor-pointer"
                         onClick={() => openLightbox(index)}
