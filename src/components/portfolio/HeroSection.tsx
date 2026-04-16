@@ -4,11 +4,9 @@ export default function HeroSection() {
       className="h-screen flex items-center justify-center text-center relative bg-fixed bg-center bg-no-repeat bg-cover"
       style={{
         /* Lembre-se de colocar a foto na pasta public/img/ */
-        backgroundImage: "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/img/page_principal_aspen.jpeg')",
-      }}
-    >
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/page_principal_aspen.jpeg')",}}>
       <div className="relative z-10 container-custom animate-fade-in">
-        <h2 className="font-titulos text-[clamp(3rem,6vw,5.5rem)] text-white tracking-[-0.03em] mb-8 drop-shadow-md leading-[1.2]">
+        <h2 className="font-titulos text-[clamp(3rem,6vw,5.5rem)] text-bege tracking-[-0.03em] mb-8 drop-shadow-md leading-[1.2]">
           Feito na medida<br />do seu viver.
         </h2>
         

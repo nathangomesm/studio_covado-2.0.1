@@ -33,12 +33,13 @@ export async function POST(request: Request) {
         data: {
             titulo,
             descricao,
-            categoriaId: parseInt(categoriaId, 10), // <-- A MÁGICA AQUI! Transformando string em número
+            categoriaId: parseInt(categoriaId, 10),
             cliente,
             localizacao,
             area,
             status,
-            imagemPrincipal: urls[0],
+            imagemPrincipal: urls[0],       // A foto 1 vai para a capa
+            galeria: urls.slice(1),         // A foto 2 em diante vai para a galeria!
             ativo: true,
         }
     });

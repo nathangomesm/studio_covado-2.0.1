@@ -7,13 +7,13 @@ export default function Header() {
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
-    <header className="absolute w-full top-0 z-[1000] py-6 bg-areia shadow-sm">
+    <header className="absolute w-full top-0 z-[1000] py-1 bg-areia shadow-sm">
       <div className="container-custom flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center z-[1001]">
           <Link href="/">
             {/* Lembre-se de colocar sua logo na pasta public/img/ com o nome Logo_2.png */}
-            <img src="/img/Logo_2.png" alt="Studio Côvado" className="h-[150px] w-auto block" />
+            <img src="/img/Logo_2.png" alt="Studio Côvado" className="h-[100px] w-auto block" />
           </Link>
         </div>
 
@@ -22,15 +22,14 @@ export default function Header() {
           <ul className="flex items-center list-none">
             {[
               { nome: "Home", link: "/" },
-              { nome: "Sobre nós", link: "#sobre" },
-              { nome: "Projetos", link: "#projetos" },
-              { nome: "Contato", link: "#contato" },
+              { nome: "Sobre nós", link: "/#sobre" },    // <-- Barra adicionada aqui
+              { nome: "Projetos", link: "/#projetos" },  // <-- Barra adicionada aqui
+              { nome: "Contato", link: "/#contato" },    // <-- Barra adicionada aqui
             ].map((item, index, array) => (
               <li
                 key={item.nome}
-                className={`px-6 h-[1.1rem] flex items-center leading-none ${
-                  index !== array.length - 1 ? "border-r border-carvalho" : "pr-0"
-                }`}
+                className={`px-6 h-[1.1rem] flex items-center leading-none ${index !== array.length - 1 ? "border-r border-carvalho" : "pr-0"
+                  }`}
               >
                 <Link
                   href={item.link}
@@ -57,9 +56,8 @@ export default function Header() {
 
         {/* Menu Overlay (Mobile) */}
         <nav
-          className={`fixed inset-0 w-full h-[100vh] bg-bege flex flex-col justify-center items-center gap-8 z-[1000] transition-opacity duration-300 md:hidden ${
-            menuAberto ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
+          className={`fixed inset-0 w-full h-[100vh] bg-bege flex flex-col justify-center items-center gap-8 z-[1000] transition-opacity duration-300 md:hidden ${menuAberto ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            }`}
         >
           <ul className="flex flex-col items-center gap-6">
             {["Home", "Sobre nós", "Projetos", "Contato"].map((item) => (

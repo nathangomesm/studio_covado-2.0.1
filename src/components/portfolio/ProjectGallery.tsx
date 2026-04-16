@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 // Tipagens para o TypeScript não reclamar dos dados que vêm do banco
 type Categoria = {
@@ -41,24 +42,22 @@ export default function ProjectGallery({ projetos, categorias }: ProjectGalleryP
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <button
               onClick={() => setFiltroAtivo("todos")}
-              className={`bg-transparent border-none font-textos text-[0.8rem] uppercase tracking-[0.1em] cursor-pointer transition-all duration-300 pb-[5px] border-b ${
-                filtroAtivo === "todos"
+              className={`bg-transparent border-none font-textos text-[0.8rem] uppercase tracking-[0.1em] cursor-pointer transition-all duration-300 pb-[5px] border-b ${filtroAtivo === "todos"
                   ? "opacity-100 text-carvalho border-carvalho"
                   : "opacity-60 text-oliva border-transparent hover:opacity-100 hover:text-carvalho hover:border-carvalho"
-              }`}
+                }`}
             >
               Todos
             </button>
-            
+
             {categorias.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setFiltroAtivo(cat.id)}
-                className={`bg-transparent border-none font-textos text-[0.8rem] uppercase tracking-[0.1em] cursor-pointer transition-all duration-300 pb-[5px] border-b ${
-                  filtroAtivo === cat.id
+                className={`bg-transparent border-none font-textos text-[0.8rem] uppercase tracking-[0.1em] cursor-pointer transition-all duration-300 pb-[5px] border-b ${filtroAtivo === cat.id
                     ? "opacity-100 text-carvalho border-carvalho"
                     : "opacity-60 text-oliva border-transparent hover:opacity-100 hover:text-carvalho hover:border-carvalho"
-                }`}
+                  }`}
               >
                 {cat.nome}
               </button>
@@ -74,10 +73,12 @@ export default function ProjectGallery({ projetos, categorias }: ProjectGalleryP
                 <div className="bg-transparent cursor-pointer">
                   {/* Container da Imagem com os efeitos de Hover */}
                   <div className="aspect-[4/3] overflow-hidden mb-6 relative">
-                    <img
+                    <Image
                       src={projeto.imagemPrincipal}
                       alt={projeto.titulo}
-                      className="w-full h-full object-cover grayscale-[20%] transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.03] group-hover:grayscale-0"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover grayscale-[20%] transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.03] group-hover:grayscale-0"
                     />
                   </div>
                   {/* Informações do Card */}

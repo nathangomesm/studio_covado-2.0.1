@@ -25,6 +25,7 @@ model Projeto {
   categoriaId     Int
   categoria       Categoria       @relation(fields: [categoriaId], references: [id])
   imagemPrincipal String
+  galeria         String[]        @default([]) // <--- ADICIONE ESTA LINHA
   dataPublicacao  DateTime        @default(now())
   ativo           Boolean         @default(true)
 
