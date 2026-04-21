@@ -39,3 +39,6 @@ next-env.d.ts
 
 # prisma
 # NÃO ignorar prisma/migrations — deve ir para o repositório!
+
+.vercel
+.env*.local
