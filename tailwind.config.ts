@@ -6,6 +6,11 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    'container-custom',
+    'titulo-secao',
+    'secao-padrao'
+  ],
   theme: {
     extend: {
       colors: {
