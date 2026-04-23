@@ -1,5 +1,13 @@
 import type { NextConfig } from 'next'
 
+// Verifica se está rodando no seu computador ou na Vercel
+const isDev = process.env.NODE_ENV !== 'production'
+
+// Aplica o 'unsafe-eval' apenas no seu computador para permitir o reload da tela
+const scriptSrc = isDev 
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net"
+  : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net"
+
 const securityHeaders = [
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
@@ -9,7 +17,7 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+      scriptSrc, // <--- Regra inteligente aplicada aqui
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",

@@ -1,116 +1,69 @@
 "use client";
-import { useState, useEffect } from "react";
-import Image from "next/image";
 
-type LightboxGalleryProps = {
+import { useState } from "react";
+import Image from "next/image";
+// Importações da biblioteca mágica
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
+
+interface Props {
     titulo: string;
     imagemPrincipal: string;
-    galeria: string[];
-};
+    galeria: string[]; // Supondo que a galeria venha como um array de links das imagens
+}
 
-export default function LightboxGallery({ titulo, imagemPrincipal, galeria }: LightboxGalleryProps) {
-    const todasAsFotos = [imagemPrincipal, ...(galeria || [])];
+export default function LightboxGallery({ titulo, imagemPrincipal, galeria }: Props) {
+    const [indexAberto, setIndexAberto] = useState(-1);
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    // Junta a imagem principal com as outras da galeria para o cliente poder passar pro lado
+    const todasAsImagens = [imagemPrincipal, ...(galeria || [])];
 
-    const openLightbox = (index: number) => {
-        setCurrentIndex(index);
-        setIsOpen(true);
-    };
-
-    const closeLightbox = () => setIsOpen(false);
-
-    // Deixamos o evento (e) opcional para funcionar tanto com clique quanto com teclado
-    const nextImage = (e?: React.MouseEvent) => {
-        if (e) e.stopPropagation();
-        setCurrentIndex((prev) => (prev === todasAsFotos.length - 1 ? 0 : prev + 1));
-    };
-
-    const prevImage = (e?: React.MouseEvent) => {
-        if (e) e.stopPropagation();
-        setCurrentIndex((prev) => (prev === 0 ? todasAsFotos.length - 1 : prev - 1));
-    };
-
-    // ─── MÁGICA DO TECLADO AQUI ────────────────────────────────────────────────
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (!isOpen) return; // Só escuta o teclado se a galeria estiver aberta
-
-            if (e.key === "ArrowRight") nextImage();
-            if (e.key === "ArrowLeft") prevImage();
-            if (e.key === "Escape") closeLightbox();
-        };
-
-        // Adiciona o "ouvido" quando o componente carrega
-        window.addEventListener("keydown", handleKeyDown);
-
-        // Remove o "ouvido" quando a tela fecha (evita travar o navegador)
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, todasAsFotos.length]);
-    // ──────────────────────────────────────────────────────────────────────────
+    // A biblioteca precisa que as imagens tenham esse formato { src: "link" }
+    const slides = todasAsImagens.map((img) => ({ src: img }));
 
     return (
         <>
-            {/* Mosaico de Miniaturas */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                {todasAsFotos.map((url, index) => (
+            {/* O GRID DAS FOTOS PEQUENAS NA TELA (Onde ajustamos o tamanho hoje mais cedo) 
+      */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+                {todasAsImagens.map((img, index) => (
                     <div
-                    
                         key={index}
-                        className="h-[400px] relative overflow-hidden group cursor-pointer"
-                        onClick={() => openLightbox(index)}
+                        className="aspect-[4/3] relative overflow-hidden cursor-pointer group"
+                        onClick={() => setIndexAberto(index)}
                     >
                         <Image
-                            src={url}
-                            alt={`Galeria ${titulo} - ${index + 1}`}
+                            src={img}
+                            alt={`${titulo} - Imagem ${index + 1}`}
                             fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
+                        {/* Efeito escuro de hover para indicar que pode clicar */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                     </div>
                 ))}
             </div>
 
-            {/* TELA ESCURA DO CARROSSEL */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-12"
-                    onClick={closeLightbox}
-                >
-                    {/* Botão Fechar */}
-                    <button className="absolute top-6 right-8 text-white text-4xl hover:text-gray-300 z-50">
-                        &times;
-                    </button>
-
-                    {/* Botão Voltar */}
-                    <button
-                        className="absolute left-4 md:left-12 text-white text-5xl hover:text-gray-300 p-4 z-50"
-                        onClick={prevImage}
-                    >
-                        &#10094;
-                    </button>
-
-                    {/* Imagem Grande (Otimizada com Next Image) */}
-                    <div className="relative w-full h-full max-w-6xl max-h-screen flex items-center justify-center">
-                        <Image
-                            src={todasAsFotos[currentIndex]}
-                            alt={`Galeria ${titulo}`}
-                            fill
-                            sizes="100vw"
-                            className="object-contain select-none"
-                        />
-                    </div>
-
-                    {/* Botão Avançar */}
-                    <button
-                        className="absolute right-4 md:right-12 text-white text-5xl hover:text-gray-300 p-4 z-50"
-                        onClick={nextImage}
-                    >
-                        &#10095;
-                    </button>
-                </div>
-            )}
+            {/* A MÁGICA DA TELA CHEIA (LIGHTBOX COM ZOOM)
+      */}
+            <Lightbox
+                open={indexAberto >= 0}
+                close={() => setIndexAberto(-1)}
+                index={indexAberto}
+                slides={slides}
+                plugins={[Zoom]} // Ativando o super poder de zoom!
+                zoom={{
+                    maxZoomPixelRatio: 3, // Permite dar zoom de até 3x o tamanho original
+                    zoomInMultiplier: 2, // Velocidade do zoom no clique
+                }}
+                render={{
+                    // Desativa botões desnecessários para um design mais limpo e minimalista
+                    buttonPrev: slides.length <= 1 ? () => null : undefined,
+                    buttonNext: slides.length <= 1 ? () => null : undefined,
+                }}
+            />
         </>
     );
 }

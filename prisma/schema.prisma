@@ -32,10 +32,8 @@ model Projeto {
   ativo           Boolean         @default(true)
 
   // Ficha Técnica
-  cliente         String          @default("Confidencial") @db.VarChar(100)
   localizacao     String          @default("A definir") @db.VarChar(200)
   area            String          @default("A definir") @db.VarChar(50)
-  status          String          @default("Concluído") @db.VarChar(100)
 
   imagens         ImagemProjeto[]
 

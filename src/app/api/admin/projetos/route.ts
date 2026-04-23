@@ -8,10 +8,8 @@ export async function POST(request: Request) {
     const titulo = formData.get('titulo') as string;
     const descricao = formData.get('descricao') as string;
     const categoriaId = formData.get('categoriaId') as string;
-    const cliente = formData.get('cliente') as string;
     const localizacao = formData.get('localizacao') as string;
     const area = formData.get('area') as string;
-    const status = formData.get('status') as string;
 
     // Pegar todos os arquivos enviados
     const files = formData.getAll('imagens') as File[];
@@ -34,10 +32,8 @@ export async function POST(request: Request) {
             titulo,
             descricao,
             categoriaId: parseInt(categoriaId, 10),
-            cliente,
             localizacao,
             area,
-            status,
             imagemPrincipal: urls[0],       // A foto 1 vai para a capa
             galeria: urls.slice(1),         // A foto 2 em diante vai para a galeria!
             ativo: true,

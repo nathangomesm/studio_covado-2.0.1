@@ -69,10 +69,8 @@ export default function AdminNovoProjeto() {
           <textarea name="descricao" placeholder="Descrição completa" className="border p-3 w-full h-32" required />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <input name="cliente" placeholder="Cliente" className="border p-2" />
             <input name="localizacao" placeholder="Localização" className="border p-2" />
             <input name="area" placeholder="Área (ex: 450m²)" className="border p-2" />
-            <input name="status" placeholder="Status" className="border p-2" />
           </div>
 
           <div className="border-2 border-dashed border-areia p-8 text-center bg-gray-50">

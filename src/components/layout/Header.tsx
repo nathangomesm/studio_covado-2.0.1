@@ -7,13 +7,13 @@ export default function Header() {
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
-    <header className="absolute w-full top-0 z-[1000] py-1 bg-areia shadow-sm">
+    <header className="absolute w-full top-0 z-[1000] bg-areia shadow-sm">
       <div className="container-custom flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center z-[1001]">
+        <div className="flex items-center z-[1001] -mt-3">
           <Link href="/">
             {/* Lembre-se de colocar sua logo na pasta public/img/ com o nome Logo_2.png */}
-            <img src="/img/Logo_2.png" alt="Studio Côvado" className="h-[100px] w-auto block" />
+            <img src="/img/Logo_2.png" alt="Studio Côvado" className="h-[120px] w-auto block" />
           </Link>
         </div>
 
@@ -33,7 +33,7 @@ export default function Header() {
               >
                 <Link
                   href={item.link}
-                  className="text-[0.85rem] uppercase tracking-[0.15em] font-normal relative group"
+                  className="text-[0.9rem] uppercase tracking-[0.15em] font-normal relative group"
                 >
                   {item.nome}
                   {/* Linha animada do hover */}

@@ -78,26 +78,16 @@ export default async function ProjetoDetalhePage({ params }: Props) {
             </h3>
             <ul className="space-y-4 text-[0.95rem] text-[#555] font-textos">
               <li className="border-b border-[#eee] pb-2">
-                <strong className="text-carvalho font-normal">Cliente:</strong> {projeto.cliente || "Confidencial"}
-              </li>
-              <li className="border-b border-[#eee] pb-2">
-                {/* Formatando o campo de data para pegar apenas o ano */}
-                <strong className="text-carvalho font-normal">Ano:</strong> {projeto.dataPublicacao.getFullYear()}
-              </li>
-              <li className="border-b border-[#eee] pb-2">
                 <strong className="text-carvalho font-normal">Localização:</strong> {projeto.localizacao || "-"}
               </li>
               <li className="border-b border-[#eee] pb-2">
                 <strong className="text-carvalho font-normal">Área:</strong> {projeto.area || "-"}
               </li>
-              <li className="border-b border-[#eee] pb-2">
-                <strong className="text-carvalho font-normal">Status:</strong> {projeto.status || "-"}
-              </li>
             </ul>
 
             <Link
               href="/#projetos"
-              className="inline-block mt-8 text-[0.9rem] font-bold uppercase text-oliva hover:text-carvalho transition-all hover:-ml-1"
+              className="inline-block mt-12 text-[1.2rem] font-bold uppercase text-oliva hover:text-carvalho transition-all hover:-ml-1"
             >
               ← Voltar para Projetos
             </Link>
@@ -119,7 +109,7 @@ export default async function ProjetoDetalhePage({ params }: Props) {
       {/* Galeria de Fotos Interativa */}
       <section className="secao-padrao bg-areia">
         <div className="container-custom">
-          <h3 className="titulo-secao text-center w-full block">Galeria</h3>
+          <h3 className="titulo-secao !text-[#3E2929] -mt-6">Imagens do projeto</h3>
 
           <LightboxGallery
             titulo={projeto.titulo}
